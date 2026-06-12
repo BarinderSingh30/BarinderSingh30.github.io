@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Barinder Singh — Data Analyst</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0d0f14;
+    --bg2: #13161e;
+    --bg3: #1a1e29;
+    --border: rgba(255,255,255,0.07);
+    --border-bright: rgba(255,255,255,0.14);
+    --text: #e8eaf0;
+    --text-muted: #7a8099;
+    --text-dim: #4a5068;
+    --accent: #6366f1;
+    --accent-light: #818cf8;
+    --accent-glow: rgba(99,102,241,0.15);
+    --teal: #14b8a6;
+    --amber: #f59e0b;
+    --green: #22c55e;
+    --font-display: 'Space Grotesk', sans-serif;
+    --font-body: 'Inter', sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 15px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 40px; height: 60px;
+    background: rgba(13,15,20,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo { font-family: var(--font-display); font-size: 17px; font-weight: 700; letter-spacing: -0.3px; color: var(--text); text-decoration: none; }
+  .nav-logo span { color: var(--accent-light); }
+  .nav-links { display: flex; gap: 28px; list-style: none; }
+  .nav-links a { color: var(--text-muted); text-decoration: none; font-size: 13.5px; font-weight: 500; letter-spacing: 0.2px; transition: color .2s; }
+  .nav-links a:hover { color: var(--text); }
+  .nav-cta { background: var(--accent); color: #fff; padding: 7px 18px; border-radius: 8px; font-size: 13px; font-weight: 600; text-decoration: none; transition: opacity .2s; }
+  .nav-cta:hover { opacity: 0.85; }
+
+  /* ── SECTIONS ── */
+  section { padding: 100px 40px; max-width: 1100px; margin: 0 auto; }
+
+  /* ── HERO ── */
+  #hero {
+    min-height: 100vh; display: flex; align-items: center;
+    padding-top: 100px; gap: 60px; max-width: 1100px; margin: 0 auto;
+  }
+  .hero-text { flex: 1; }
+  .hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--accent-glow); border: 1px solid rgba(99,102,241,0.3);
+    color: var(--accent-light); font-size: 12.5px; font-weight: 500;
+    padding: 5px 14px; border-radius: 999px; margin-bottom: 24px; letter-spacing: 0.4px;
+  }
+  .hero-eyebrow::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--accent-light); animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+  h1 {
+    font-family: var(--font-display); font-size: clamp(38px,5vw,60px);
+    font-weight: 700; line-height: 1.1; letter-spacing: -1.5px; margin-bottom: 20px; color: #fff;
+  }
+  h1 em { font-style: normal; color: var(--accent-light); }
+  .hero-sub { font-size: 16px; color: var(--text-muted); line-height: 1.7; max-width: 520px; margin-bottom: 36px; }
+  .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+  .btn-primary {
+    background: var(--accent); color: #fff; padding: 11px 24px; border-radius: 10px;
+    font-size: 14px; font-weight: 600; text-decoration: none; transition: transform .15s, opacity .15s;
+  }
+  .btn-primary:hover { transform: translateY(-1px); opacity: .9; }
+  .btn-outline {
+    border: 1px solid var(--border-bright); color: var(--text); padding: 11px 24px;
+    border-radius: 10px; font-size: 14px; font-weight: 500; text-decoration: none; transition: border-color .2s, background .2s;
+  }
+  .btn-outline:hover { border-color: var(--accent-light); background: var(--accent-glow); }
+
+  .hero-stats { display: flex; gap: 32px; margin-top: 44px; padding-top: 44px; border-top: 1px solid var(--border); }
+  .stat { display: flex; flex-direction: column; }
+  .stat-num { font-family: var(--font-display); font-size: 28px; font-weight: 700; color: #fff; letter-spacing: -1px; }
+  .stat-label { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+
+  .hero-visual { flex: 0 0 340px; }
+  .hero-card {
+    background: var(--bg2); border: 1px solid var(--border-bright);
+    border-radius: 16px; padding: 24px; position: relative; overflow: hidden;
+  }
+  .hero-card::before {
+    content: ''; position: absolute; top: -60px; right: -60px;
+    width: 180px; height: 180px; background: radial-gradient(circle, rgba(99,102,241,0.2) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+  .card-title { font-size: 12px; color: var(--text-muted); font-weight: 500; letter-spacing: 0.3px; }
+  .badge { font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 999px; }
+  .badge-green { background: rgba(34,197,94,0.15); color: #4ade80; border: 1px solid rgba(34,197,94,0.25); }
+  .chart-wrapper { height: 140px; margin-bottom: 16px; }
+  .mini-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .mini-stat { background: var(--bg3); border-radius: 8px; padding: 10px 12px; }
+  .mini-stat-val { font-family: var(--font-display); font-size: 18px; font-weight: 700; color: #fff; }
+  .mini-stat-lbl { font-size: 11px; color: var(--text-muted); }
+
+  /* ── SECTION HEADERS ── */
+  .section-label { font-size: 11px; font-weight: 600; letter-spacing: 1.2px; text-transform: uppercase; color: var(--accent-light); margin-bottom: 10px; }
+  h2 { font-family: var(--font-display); font-size: clamp(26px,3.5vw,38px); font-weight: 700; letter-spacing: -0.8px; color: #fff; line-height: 1.2; margin-bottom: 14px; }
+  .section-sub { color: var(--text-muted); font-size: 15px; max-width: 560px; margin-bottom: 48px; }
+
+  /* ── TECH STACK ── */
+  #stack { padding-top: 60px; padding-bottom: 60px; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .stack-scroll { display: flex; flex-wrap: wrap; gap: 10px; }
+  .tech-pill {
+    display: flex; align-items: center; gap: 8px;
+    background: var(--bg2); border: 1px solid var(--border);
+    color: var(--text-muted); font-size: 13px; font-weight: 500;
+    padding: 8px 16px; border-radius: 8px; transition: border-color .2s, color .2s;
+  }
+  .tech-pill:hover { border-color: var(--border-bright); color: var(--text); }
+  .tech-pill .dot { width: 7px; height: 7px; border-radius: 50%; }
+  .dot-purple { background: var(--accent-light); }
+  .dot-teal { background: var(--teal); }
+  .dot-amber { background: var(--amber); }
+  .dot-green { background: var(--green); }
+
+  /* ── EXPERIENCE ── */
+  .exp-card {
+    background: var(--bg2); border: 1px solid var(--border); border-radius: 14px;
+    padding: 28px 32px; position: relative;
+  }
+  .exp-card::before { content: ''; position: absolute; left: 0; top: 28px; bottom: 28px; width: 3px; background: linear-gradient(to bottom, var(--accent), var(--teal)); border-radius: 999px; }
+  .exp-meta { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+  .exp-role { font-family: var(--font-display); font-size: 18px; font-weight: 700; color: #fff; }
+  .exp-company { color: var(--accent-light); font-size: 14px; font-weight: 500; margin-top: 3px; }
+  .exp-date { font-size: 12px; color: var(--text-muted); background: var(--bg3); padding: 4px 12px; border-radius: 999px; border: 1px solid var(--border); white-space: nowrap; }
+  .exp-bullets { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  .exp-bullets li { font-size: 14px; color: var(--text-muted); padding-left: 18px; position: relative; line-height: 1.6; }
+  .exp-bullets li::before { content: '→'; position: absolute; left: 0; color: var(--accent); font-size: 12px; top: 2px; }
+
+  /* ── PROJECTS ── */
+  .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+  .project-card {
+    background: var(--bg2); border: 1px solid var(--border); border-radius: 14px;
+    padding: 24px; display: flex; flex-direction: column; gap: 14px;
+    transition: border-color .2s, transform .2s;
+    cursor: default;
+  }
+  .project-card:hover { border-color: var(--border-bright); transform: translateY(-2px); }
+  .project-top { display: flex; justify-content: space-between; align-items: flex-start; }
+  .project-icon { font-size: 26px; }
+  .project-tools { display: flex; flex-wrap: wrap; gap: 5px; }
+  .tool-tag { font-size: 11px; font-weight: 500; padding: 3px 9px; border-radius: 5px; background: var(--bg3); border: 1px solid var(--border); color: var(--text-muted); }
+  .project-title { font-family: var(--font-display); font-size: 17px; font-weight: 700; color: #fff; letter-spacing: -0.3px; }
+  .project-desc { font-size: 13.5px; color: var(--text-muted); line-height: 1.65; }
+  .project-metrics { display: flex; gap: 16px; margin-top: auto; padding-top: 14px; border-top: 1px solid var(--border); }
+  .metric { display: flex; flex-direction: column; }
+  .metric-val { font-family: var(--font-display); font-size: 17px; font-weight: 700; color: #fff; }
+  .metric-lbl { font-size: 11px; color: var(--text-muted); }
+
+  /* ── DASHBOARD DEMO ── */
+  #dashboards { background: var(--bg2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  #dashboards > div { max-width: 1100px; margin: 0 auto; }
+  .dash-tabs { display: flex; gap: 4px; margin-bottom: 28px; background: var(--bg3); border-radius: 10px; padding: 4px; width: fit-content; }
+  .dash-tab { padding: 8px 18px; border-radius: 7px; font-size: 13px; font-weight: 500; cursor: pointer; color: var(--text-muted); border: none; background: transparent; transition: background .2s, color .2s; }
+  .dash-tab.active { background: var(--accent); color: #fff; }
+  .dash-panel { display: none; }
+  .dash-panel.active { display: block; }
+  .dash-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
+  .kpi-card { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 16px; }
+  .kpi-val { font-family: var(--font-display); font-size: 22px; font-weight: 700; color: #fff; }
+  .kpi-lbl { font-size: 12px; color: var(--text-muted); margin-top: 3px; }
+  .kpi-change { font-size: 11px; font-weight: 600; margin-top: 6px; }
+  .up { color: var(--green); }
+  .down { color: #f87171; }
+  .dash-charts { display: grid; grid-template-columns: 2fr 1fr; gap: 16px; }
+  .chart-card { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 18px; }
+  .chart-card-title { font-size: 13px; font-weight: 600; color: var(--text-muted); margin-bottom: 16px; letter-spacing: 0.2px; }
+  .chart-canvas-wrap { height: 220px; }
+
+  /* ── EDUCATION ── */
+  .edu-card {
+    background: var(--bg2); border: 1px solid var(--border); border-radius: 14px;
+    padding: 28px 32px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;
+  }
+  .edu-degree { font-family: var(--font-display); font-size: 19px; font-weight: 700; color: #fff; margin-bottom: 4px; }
+  .edu-school { color: var(--accent-light); font-size: 14px; font-weight: 500; margin-bottom: 12px; }
+  .edu-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .edu-tag { font-size: 11.5px; color: var(--text-muted); background: var(--bg3); border: 1px solid var(--border); padding: 3px 10px; border-radius: 5px; }
+  .edu-gpa { text-align: right; }
+  .gpa-val { font-family: var(--font-display); font-size: 36px; font-weight: 700; color: #fff; letter-spacing: -1px; }
+  .gpa-label { font-size: 12px; color: var(--text-muted); }
+
+  /* ── CONTACT ── */
+  #contact { text-align: center; }
+  #contact h2 { margin-bottom: 10px; }
+  #contact .section-sub { margin-left: auto; margin-right: auto; }
+  .contact-links { display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; margin-top: 32px; }
+  .contact-link {
+    display: flex; align-items: center; gap: 8px;
+    background: var(--bg2); border: 1px solid var(--border); color: var(--text);
+    padding: 12px 22px; border-radius: 10px; text-decoration: none; font-size: 14px; font-weight: 500;
+    transition: border-color .2s, background .2s;
+  }
+  .contact-link:hover { border-color: var(--accent); background: var(--accent-glow); }
+  .contact-link svg { width: 17px; height: 17px; flex-shrink: 0; }
+
+  /* ── FOOTER ── */
+  footer { text-align: center; padding: 32px; color: var(--text-dim); font-size: 13px; border-top: 1px solid var(--border); }
+
+  @media (max-width: 768px) {
+    nav { padding: 0 20px; }
+    .nav-links { display: none; }
+    section, #hero { padding: 80px 20px; }
+    #hero { flex-direction: column; gap: 40px; min-height: auto; }
+    .hero-visual { flex: auto; width: 100%; }
+    .hero-stats { gap: 20px; }
+    .dash-grid { grid-template-columns: 1fr 1fr; }
+    .dash-charts { grid-template-columns: 1fr; }
+    .edu-card { flex-direction: column; }
+    .edu-gpa { text-align: left; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#hero" class="nav-logo">Barinder<span>.</span></a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#dashboards">Dashboards</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="mailto:emailforbarinder@gmail.com" class="nav-cta">Hire me</a>
+</nav>
+
+<!-- HERO -->
+<div id="hero" style="padding: 0 40px;">
+  <div class="hero-text">
+    <div class="hero-eyebrow">Available for opportunities</div>
+    <h1>Turning raw data<br/>into <em>clear decisions</em></h1>
+    <p class="hero-sub">Data Analyst skilled in SQL, Python, Power BI, Tableau, and Snowflake. I build end-to-end analytics solutions — from pipeline to published dashboard.</p>
+    <div class="hero-actions">
+      <a href="#projects" class="btn-primary">View my work</a>
+      <a href="#contact" class="btn-outline">Get in touch</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><span class="stat-num">20K+</span><span class="stat-label">Records analyzed</span></div>
+      <div class="stat"><span class="stat-num">3</span><span class="stat-label">Full-stack projects</span></div>
+      <div class="stat"><span class="stat-num">5+</span><span class="stat-label">BI & cloud tools</span></div>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="hero-card">
+      <div class="card-header">
+        <span class="card-title">UPI Transaction Volume</span>
+        <span class="badge badge-green">Live demo</span>
+      </div>
+      <div class="chart-wrapper"><canvas id="heroChart"></canvas></div>
+      <div class="mini-stats">
+        <div class="mini-stat"><div class="mini-stat-val">₹2.4M</div><div class="mini-stat-lbl">Total volume</div></div>
+        <div class="mini-stat"><div class="mini-stat-val">94%</div><div class="mini-stat-lbl">Success rate</div></div>
+        <div class="mini-stat"><div class="mini-stat-val">12</div><div class="mini-stat-lbl">Banks tracked</div></div>
+        <div class="mini-stat"><div class="mini-stat-val">8</div><div class="mini-stat-lbl">Cities covered</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TECH STACK -->
+<div id="stack" style="padding: 48px 40px; max-width: 1100px; margin: 0 auto; border: none;">
+  <p class="section-label" style="margin-bottom: 18px;">Tech stack</p>
+  <div class="stack-scroll">
+    <span class="tech-pill"><span class="dot dot-purple"></span>SQL</span>
+    <span class="tech-pill"><span class="dot dot-purple"></span>Python</span>
+    <span class="tech-pill"><span class="dot dot-purple"></span>PostgreSQL</span>
+    <span class="tech-pill"><span class="dot dot-purple"></span>MySQL</span>
+    <span class="tech-pill"><span class="dot dot-purple"></span>MS SQL Server</span>
+    <span class="tech-pill"><span class="dot dot-teal"></span>Power BI</span>
+    <span class="tech-pill"><span class="dot dot-teal"></span>DAX</span>
+    <span class="tech-pill"><span class="dot dot-teal"></span>Power Query</span>
+    <span class="tech-pill"><span class="dot dot-teal"></span>Tableau</span>
+    <span class="tech-pill"><span class="dot dot-teal"></span>Excel</span>
+    <span class="tech-pill"><span class="dot dot-amber"></span>Snowflake</span>
+    <span class="tech-pill"><span class="dot dot-amber"></span>AWS S3</span>
+    <span class="tech-pill"><span class="dot dot-amber"></span>AWS IAM</span>
+    <span class="tech-pill"><span class="dot dot-green"></span>Pandas</span>
+    <span class="tech-pill"><span class="dot dot-green"></span>NumPy</span>
+    <span class="tech-pill"><span class="dot dot-green"></span>Matplotlib</span>
+    <span class="tech-pill"><span class="dot dot-green"></span>Seaborn</span>
+    <span class="tech-pill"><span class="dot dot-green"></span>Git / GitHub</span>
+  </div>
+</div>
+
+<!-- EXPERIENCE -->
+<section id="about">
+  <p class="section-label">Experience</p>
+  <h2>Where I've worked</h2>
+  <p class="section-sub">Hands-on experience building data pipelines and analytics systems in a research environment.</p>
+  <div class="exp-card" style="padding-left: 44px;">
+    <div class="exp-meta">
+      <div>
+        <div class="exp-role">Software Engineer Intern</div>
+        <div class="exp-company">CSIR-CSIO — Chandigarh, India</div>
+      </div>
+      <div class="exp-date">Jan 2023 – Jun 2023</div>
+    </div>
+    <ul class="exp-bullets">
+      <li>Designed data pipelines to ingest, transform, and clean raw sensor data from a graph-based SLAM robotic system — ensuring integrity for downstream analytics.</li>
+      <li>Applied Python preprocessing (Pandas, NumPy) to handle missing values, normalize sensor readings, and restructure datasets for usability.</li>
+      <li>Profiled raw datasets to detect anomalies, outliers, and inconsistencies; documented findings to guide engineering decisions.</li>
+      <li>Stored processed data in structured SQL databases and wrote optimized queries to support retrieval and downstream analysis workflows.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects" style="padding-top: 20px;">
+  <p class="section-label">Work</p>
+  <h2>Featured projects</h2>
+  <p class="section-sub">End-to-end analytics projects — from raw data ingestion to published, interactive dashboards.</p>
+  <div class="projects-grid">
+
+    <div class="project-card">
+      <div class="project-top">
+        <div class="project-icon">💳</div>
+        <div class="project-tools">
+          <span class="tool-tag">Power BI</span>
+          <span class="tool-tag">DAX</span>
+          <span class="tool-tag">Power Query</span>
+          <span class="tool-tag">Excel</span>
+        </div>
+      </div>
+      <div class="project-title">UPI Transaction Data Analysis</div>
+      <div class="project-desc">Analyzed 20,000+ UPI transaction records across banks, cities, merchants, and demographics. Built a 2-page interactive dashboard with 10 synced slicers, bookmark-based chart toggles, and conditional formatting heatmaps. Published to Power BI Service for stakeholder access.</div>
+      <div class="project-metrics">
+        <div class="metric"><span class="metric-val">20K+</span><span class="metric-lbl">Records</span></div>
+        <div class="metric"><span class="metric-val">10</span><span class="metric-lbl">Synced slicers</span></div>
+        <div class="metric"><span class="metric-val">2</span><span class="metric-lbl">Dashboard pages</span></div>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-top">
+        <div class="project-icon">🔄</div>
+        <div class="project-tools">
+          <span class="tool-tag">Power BI</span>
+          <span class="tool-tag">SQL Server</span>
+          <span class="tool-tag">MySQL</span>
+          <span class="tool-tag">DAX</span>
+        </div>
+      </div>
+      <div class="project-title">Power BI Report Migration</div>
+      <div class="project-desc">Migrated a Power BI report across database environments (SQL Server → MySQL) and deployment stages (test → production). Resolved mismatched product IDs via SQL UPDATE, built 6 DAX measures, and validated all KPIs post-transition — all values matched exactly.</div>
+      <div class="project-metrics">
+        <div class="metric"><span class="metric-val">6</span><span class="metric-lbl">DAX measures</span></div>
+        <div class="metric"><span class="metric-val">1,043</span><span class="metric-lbl">Prod records</span></div>
+        <div class="metric"><span class="metric-val">100%</span><span class="metric-lbl">KPI match</span></div>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-top">
+        <div class="project-icon">⚡</div>
+        <div class="project-tools">
+          <span class="tool-tag">Snowflake</span>
+          <span class="tool-tag">Tableau</span>
+          <span class="tool-tag">AWS S3</span>
+          <span class="tool-tag">SQL</span>
+        </div>
+      </div>
+      <div class="project-title">Energy Consumption Analysis</div>
+      <div class="project-desc">Loaded 1,000-record energy dataset into AWS S3 and ingested into Snowflake via an integration object and stage pipeline. Profiled data, ran SQL UPDATE statements by income tier, connected to Tableau Desktop, and published a 6-chart floating dashboard to Tableau Cloud.</div>
+      <div class="project-metrics">
+        <div class="metric"><span class="metric-val">6</span><span class="metric-lbl">Charts built</span></div>
+        <div class="metric"><span class="metric-val">3</span><span class="metric-lbl">Income segments</span></div>
+        <div class="metric"><span class="metric-val">Cloud</span><span class="metric-lbl">Published</span></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- DASHBOARD DEMO -->
+<div id="dashboards" style="padding: 80px 40px;">
+  <div style="max-width:1100px; margin: 0 auto;">
+    <p class="section-label">Dashboards</p>
+    <h2>Interactive demo</h2>
+    <p class="section-sub" style="margin-bottom: 28px;">A live recreation of the UPI Transaction dashboard built in Power BI.</p>
+
+    <div class="dash-tabs">
+      <button class="dash-tab active" onclick="switchTab('upi', this)">UPI Transactions</button>
+      <button class="dash-tab" onclick="switchTab('energy', this)">Energy Analysis</button>
+    </div>
+
+    <!-- UPI PANEL -->
+    <div class="dash-panel active" id="panel-upi">
+      <div class="dash-grid">
+        <div class="kpi-card"><div class="kpi-val">₹2.41M</div><div class="kpi-lbl">Total Volume</div><div class="kpi-change up">↑ 12.4% MoM</div></div>
+        <div class="kpi-card"><div class="kpi-val">20,412</div><div class="kpi-lbl">Transactions</div><div class="kpi-change up">↑ 8.1% MoM</div></div>
+        <div class="kpi-card"><div class="kpi-val">94.2%</div><div class="kpi-lbl">Success Rate</div><div class="kpi-change up">↑ 0.6%</div></div>
+        <div class="kpi-card"><div class="kpi-val">₹118</div><div class="kpi-lbl">Avg Txn Size</div><div class="kpi-change down">↓ 2.1%</div></div>
+      </div>
+      <div class="dash-charts">
+        <div class="chart-card">
+          <div class="chart-card-title">Monthly transaction volume by bank</div>
+          <div class="chart-canvas-wrap"><canvas id="barChart"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-card-title">Transactions by city</div>
+          <div class="chart-canvas-wrap"><canvas id="doughnutChart"></canvas></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ENERGY PANEL -->
+    <div class="dash-panel" id="panel-energy">
+      <div class="dash-grid">
+        <div class="kpi-card"><div class="kpi-val">1,000</div><div class="kpi-lbl">Records</div><div class="kpi-change up">Fully validated</div></div>
+        <div class="kpi-card"><div class="kpi-val">3</div><div class="kpi-lbl">Income segments</div><div class="kpi-change up">Low / Mid / High</div></div>
+        <div class="kpi-card"><div class="kpi-val">6</div><div class="kpi-lbl">Charts published</div><div class="kpi-change up">Tableau Cloud</div></div>
+        <div class="kpi-card"><div class="kpi-val">AWS</div><div class="kpi-lbl">Data source</div><div class="kpi-change up">S3 → Snowflake</div></div>
+      </div>
+      <div class="dash-charts">
+        <div class="chart-card">
+          <div class="chart-card-title">Monthly kWh usage by income level</div>
+          <div class="chart-canvas-wrap"><canvas id="lineChart"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-card-title">Cost savings by energy source</div>
+          <div class="chart-canvas-wrap"><canvas id="barChart2"></canvas></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- EDUCATION -->
+<section id="education" style="padding-top: 40px;">
+  <p class="section-label">Education</p>
+  <h2>Academic background</h2>
+  <p class="section-sub">Strong foundation in CS fundamentals with coursework directly relevant to data work.</p>
+  <div class="edu-card">
+    <div>
+      <div class="edu-degree">B.Tech — Computer Science & Engineering</div>
+      <div class="edu-school">Punjab Engineering College, Chandigarh · Dec 2020 – Feb 2026</div>
+      <div class="edu-tags">
+        <span class="edu-tag">DBMS</span>
+        <span class="edu-tag">Data Structures & Algorithms</span>
+        <span class="edu-tag">Machine Learning</span>
+        <span class="edu-tag">Artificial Intelligence</span>
+        <span class="edu-tag">OOPs</span>
+        <span class="edu-tag">Operating Systems</span>
+      </div>
+    </div>
+    <div class="edu-gpa">
+      <div class="gpa-val">7.89</div>
+      <div class="gpa-label">CGPA / 10</div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <p class="section-label">Contact</p>
+  <h2>Let's work together</h2>
+  <p class="section-sub">Open to analyst roles, internships, and freelance data projects. Based in Chandigarh, India.</p>
+  <div class="contact-links">
+    <a href="mailto:emailforbarinder@gmail.com" class="contact-link">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 7 10-7"/></svg>
+      emailforbarinder@gmail.com
+    </a>
+    <a href="https://linkedin.com/in/barindersingh30" target="_blank" class="contact-link">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+      linkedin.com/in/barindersingh30
+    </a>
+    <a href="https://github.com/BarinderSingh30" target="_blank" class="contact-link">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/></svg>
+      github.com/BarinderSingh30
+    </a>
+  </div>
+</section>
+
+<footer>Built by Barinder Singh · Data Analyst · Chandigarh, India</footer>
+
+<script>
+const CHART_DEFAULTS = {
+  responsive: true, maintainAspectRatio: false,
+  plugins: { legend: { labels: { color: '#7a8099', font: { family: 'Inter', size: 11 }, boxWidth: 12, padding: 14 } } },
+  scales: {
+    x: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#7a8099', font: { size: 11 } } },
+    y: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#7a8099', font: { size: 11 } } }
+  }
+};
+
+// Hero sparkline
+new Chart(document.getElementById('heroChart'), {
+  type: 'line',
+  data: {
+    labels: ['Jan','Feb','Mar','Apr','May','Jun'],
+    datasets: [{
+      data: [310000,380000,420000,395000,460000,435000],
+      borderColor: '#6366f1', backgroundColor: 'rgba(99,102,241,0.12)',
+      fill: true, tension: 0.4, pointRadius: 3, pointBackgroundColor: '#818cf8', borderWidth: 2
+    }]
+  },
+  options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } },
+    scales: {
+      x: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#7a8099', font: { size: 10 } } },
+      y: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#7a8099', font: { size: 10 }, callback: v => '₹'+(v/1000)+'K' } }
+    }
+  }
+});
+
+// Bar chart – banks
+new Chart(document.getElementById('barChart'), {
+  type: 'bar',
+  data: {
+    labels: ['HDFC','SBI','ICICI','Axis','Kotak','PNB'],
+    datasets: [
+      { label: 'Q1', data: [420,380,310,275,220,190], backgroundColor: 'rgba(99,102,241,0.8)' },
+      { label: 'Q2', data: [480,410,355,290,260,210], backgroundColor: 'rgba(20,184,166,0.7)' }
+    ]
+  },
+  options: { ...CHART_DEFAULTS, scales: { ...CHART_DEFAULTS.scales, y: { ...CHART_DEFAULTS.scales.y, ticks: { color:'#7a8099', font:{size:11}, callback: v => v+'K' } } } }
+});
+
+// Doughnut – cities
+new Chart(document.getElementById('doughnutChart'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Mumbai','Delhi','Bengaluru','Hyderabad','Others'],
+    datasets: [{ data: [28,22,18,14,18], backgroundColor: ['#6366f1','#14b8a6','#f59e0b','#818cf8','#334155'], borderWidth: 0, hoverOffset: 4 }]
+  },
+  options: { responsive: true, maintainAspectRatio: false, cutout: '65%',
+    plugins: { legend: { position: 'right', labels: { color:'#7a8099', font:{family:'Inter',size:11}, boxWidth:10, padding:10 } } }
+  }
+});
+
+// Line chart – energy kWh
+new Chart(document.getElementById('lineChart'), {
+  type: 'line',
+  data: {
+    labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug'],
+    datasets: [
+      { label: 'Low income', data: [180,175,165,190,210,205,195,200], borderColor: '#6366f1', tension: 0.4, pointRadius: 3, fill: false, borderWidth: 2 },
+      { label: 'Middle income', data: [310,295,320,340,360,355,330,345], borderColor: '#14b8a6', tension: 0.4, pointRadius: 3, fill: false, borderWidth: 2 },
+      { label: 'High income', data: [520,490,550,580,610,590,560,575], borderColor: '#f59e0b', tension: 0.4, pointRadius: 3, fill: false, borderWidth: 2 }
+    ]
+  },
+  options: { ...CHART_DEFAULTS, scales: { ...CHART_DEFAULTS.scales, y: { ...CHART_DEFAULTS.scales.y, ticks:{color:'#7a8099',font:{size:11},callback: v=>v+' kWh'} } } }
+});
+
+// Bar chart 2 – energy source savings
+new Chart(document.getElementById('barChart2'), {
+  type: 'bar',
+  data: {
+    labels: ['Solar','Wind','Hydro','Geothermal'],
+    datasets: [{ label: 'Avg cost savings ($)', data: [142,118,96,87], backgroundColor: ['rgba(99,102,241,0.8)','rgba(20,184,166,0.7)','rgba(245,158,11,0.7)','rgba(34,197,94,0.7)'] }]
+  },
+  options: { ...CHART_DEFAULTS, plugins: { legend: { display: false } } }
+});
+
+function switchTab(name, el) {
+  document.querySelectorAll('.dash-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.dash-panel').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('panel-' + name).classList.add('active');
+}
+</script>
+</body>
+</html>
